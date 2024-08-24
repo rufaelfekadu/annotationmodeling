@@ -329,10 +329,10 @@ class Experiment():
         if self.stan_data is None:
             raise ValueError("Must setup stan_data first")
 
-        dem_model = utils.stanmodel("dem2_semisup" if self.stan_data["NUSERS"] > 300 else "dem_semisup", overwrite=False)
+        dem_model = utils.stanmodel("dem2_semisup" if self.stan_data["NUSERS"] > 300 else "../annotationmodeling/dem_semisup", overwrite=False)
         # dem_model = utils.stanmodel("dem2", overwrite=False)
 
-        mas_model = utils.stanmodel("mas2_semisup", overwrite=False)
+        mas_model = utils.stanmodel("../annotationmodeling/mas2_semisup", overwrite=False)
 
         self.stan_data["use_uerr"] = use_uerr
         self.stan_data["use_diff"] = use_diff
@@ -397,7 +397,7 @@ class Experiment():
             init["uerr_center"] = stan_opt_data["uerr_prior_scale"] / 5
             init["center"] = stan_opt_data["embeddings"].mean(axis=1)
             init["diff"] = self.stan_data["diff_prior_scale"] * np.ones(self.stan_data["NITEMS"])
-            masX_model = utils.stanmodel("masX", overwrite=False)
+            masX_model = utils.stanmodel("../annotationmodeling/masX", overwrite=False)
             # self.masX_opt = masX_model.optimizing(data=stan_opt_data, init=init, verbose=True, iter=masX_iter)
             self.masXsampling = masX_model.sampling(stan_opt_data, iter=500, chains=1)
             samples = self.masXsampling.extract()
