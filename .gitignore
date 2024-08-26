@@ -1,3 +1,4 @@
 ./data
+./stan_files
 # pycache
 __pycache__
