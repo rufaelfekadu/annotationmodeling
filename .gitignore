@@ -1,4 +1,4 @@
 ./data
-./stan_files
+**/*.pkl
 # pycache
 __pycache__
