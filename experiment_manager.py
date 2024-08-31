@@ -122,8 +122,8 @@ class DecompositionExperiment(experiments.RealExperiment):
                 gran_experiment.register_weighted_merge()
             super().register_weighted_merge()
 
-    def train(self, dem_iter, mas_iter):
-        super().train(dem_iter=dem_iter, mas_iter=mas_iter)
+    def train(self, dem_iter, mas_iter, masX_iter=0):
+        super().train(dem_iter=dem_iter, mas_iter=mas_iter, masX_iter=masX_iter)
         for gran_experiment in self.gran_experiments.values():
             gran_experiment.train(dem_iter=dem_iter, mas_iter=mas_iter)
     

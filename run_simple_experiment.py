@@ -78,7 +78,7 @@ def test_simple_experiment(experiment_name,
         for dist_name, dist_fn in dist_fn_dict.items():
 
             exp = experiment_factory(eval_fn=eval_fn, dist_fn=dist_fn)
-            exp.setup(full_df, full_df[['question', 'truth']], c_gold_label='truth')
+            exp.setup(full_df, full_df[['question', 'truth']], c_gold_label='gold_label')
 
             # TODO: setup() calls produce_stan_data(), even in semisupervised cases
             if supervised_items is not None:
@@ -184,7 +184,8 @@ def main():
 
     annotation_df = pd.read_csv(answer_file)
     gold_df = pd.read_csv(truth_file).set_index('question')
-    full_df = annotation_df.join(gold_df, how='inner', on='question')
+    # full_df = annotation_df.join(gold_df, how='inner', on='question')
+    full_df = pd.read_csv(answer_file).rename(columns={'newItemID': 'question', 'annotator_id': 'worker', 'answer': 'label'})
     print("USERS:", full_df['worker'].nunique())
     print("ITEMS:", full_df['question'].nunique())
     print("ANSWERS:", len(full_df))

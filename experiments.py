@@ -245,6 +245,8 @@ def eval_preds(preds, golds, eval_fn):
     ''' evaluate chosen annotations per item against known gold according to evaluation function '''
     scores = []
     for i, gold in sorted(golds.items(), key=lambda x:x[0]):
+        if i not in preds:
+            continue
         score = eval_fn(gold, preds[i]) if preds.get(i) is not None else 0
         scores.append(score)
     return scores
@@ -372,11 +374,11 @@ class Experiment():
         else:
             stan_opt_data["gold_uerr"] = np.zeros(stan_opt_data["NUSERS"])
         dem_start = time.time()
-        dem_model = utils.stanmodel(modelname="../annotationmodeling/stan_files/dem_semisup", overwrite=True)
+        dem_model = utils.stanmodel(modelname="../annotationmodeling/stan_files/dem_semisup", overwrite=False)
         self.dem_opt = dem_model.optimizing(data=stan_opt_data, init=init, verbose=True, iter=dem_iter)
         dem_end = time.time()
         mas_start = time.time()
-        mas_model = utils.stanmodel("../annotationmodeling/stan_files/mas2_semisup", overwrite=True)
+        mas_model = utils.stanmodel("../annotationmodeling/stan_files/mas2_semisup", overwrite=False)
         self.mas_opt = mas_model.optimizing(data=stan_opt_data, init=init, verbose=True, iter=mas_iter)
         mas_end = time.time()
         # if True or kwargs.get("timer"):
@@ -447,8 +449,8 @@ class Experiment():
             self.eval_model(random_scores, self.dem_preds, "DISTANCE EXPECTATION MAXIMIZATION", num_samples, verbose=debug)
         if self.mas_preds is not None:
             self.eval_model(random_scores, self.mas_preds, "MULTIDIMENSIONAL ANNOTATION SCALING", num_samples, verbose=debug)
-        if hasattr(self, "masX_preds"):
-            self.eval_model(random_scores, self.masX_preds, "MAS X", num_samples, verbose=debug)
+        # if hasattr(self, "masX_preds"):
+        #     self.eval_model(random_scores, self.masX_preds, "MAS X", num_samples, verbose=debug)
         if hasattr(self, "extra_baseline_labels"):
             for baseline_name, baseline_preds in self.extra_baseline_labels.items():
                 self.eval_model(random_scores, baseline_preds, baseline_name, num_samples, verbose=debug)
