@@ -374,11 +374,13 @@ class Experiment():
         else:
             stan_opt_data["gold_uerr"] = np.zeros(stan_opt_data["NUSERS"])
         dem_start = time.time()
-        dem_model = utils.stanmodel(modelname="../annotationmodeling/stan_files/dem_semisup", overwrite=False)
+        dem_model = utils.stanmodel(modelname="annotationmodeling/stan_files/dem", overwrite=False)
+        # dem_model = utils.stanmodel(modelname="../annotationmodeling/stan_files/dem_semisup", overwrite=False)
         self.dem_opt = dem_model.optimizing(data=stan_opt_data, init=init, verbose=True, iter=dem_iter)
         dem_end = time.time()
         mas_start = time.time()
-        mas_model = utils.stanmodel("../annotationmodeling/stan_files/mas2_semisup", overwrite=False)
+        # mas_model = utils.stanmodel("../annotationmodeling/stan_files/mas2_semisup", overwrite=False)
+        mas_model = utils.stanmodel("annotationmodeling/stan_files/mas2", overwrite=False)
         self.mas_opt = mas_model.optimizing(data=stan_opt_data, init=init, verbose=True, iter=mas_iter)
         mas_end = time.time()
         # if True or kwargs.get("timer"):
